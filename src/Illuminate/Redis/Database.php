@@ -243,7 +243,7 @@ class Database {
 
 		if ($connection === false)
 		{
-			throw new RedisConnectionException("{$error} - {$message}");
+			throw new ConnectionException("{$error} - {$message}");
 		}
 
 		return $connection;
@@ -266,7 +266,7 @@ class Database {
 	 * @param  int     $bytes
 	 * @return string
 	 */
-	protected function fileGet($bytes)
+	public function fileGet($bytes)
 	{
 		return fgets($this->getConnection(), $bytes);
 	}
@@ -277,7 +277,7 @@ class Database {
 	 * @param  string  $commnad
 	 * @return void
 	 */
-	protected function fileWrite($command)
+	public function fileWrite($command)
 	{
 		fwrite($this->getConnection(), $command);
 	}

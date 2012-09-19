@@ -5,6 +5,12 @@ use Illuminate\Redis\Database;
 
 class DatabaseTest extends PHPUnit_Framework_TestCase {
 
+	public function tearDown()
+	{
+		m::close();
+	}
+
+
 	public function testConnectMethodConnectsToDatabase()
 	{
 		$redis = $this->getMock('Illuminate\Redis\Database', array('openSocket', 'command'), array('127.0.0.1', 100));
@@ -47,14 +53,33 @@ class DatabaseTest extends PHPUnit_Framework_TestCase {
 
 	public function testBulkResponse()
 	{
-		/*
-		$redis = $this->getMock('Illuminate\Redis\Database', array('fileRead'), array('127.0.0.1', 100));
-		$redis->expects($this->once())->method('fileRead')->with($this->equalTo(3))->will($this->returnValue('foo'));
-		$redis->expects($this->once())->method('fileRead')->with($this->equalTo(2));
-		$response = $redis->parseResponse("$3\r\nfoo\r\n");
+		$redis = m::mock('Illuminate\Redis\Database[fileRead]');
+		$redis->shouldReceive('fileRead')->once()->with(3)->andReturn('foo');
+		$redis->shouldReceive('fileRead')->once()->with(2);
 
-		$this->assertEquals('foo', $response);
-		*/
+		$this->assertEquals('foo', $redis->parseResponse("$3\r\nfoo\r\n"));
+	}
+
+
+	public function testLongBulkResponse()
+	{
+		$redis = m::mock('Illuminate\Redis\Database[fileRead]');
+		$redis->shouldReceive('fileRead')->once()->with(1024)->andReturn('foo');
+		$redis->shouldReceive('fileRead')->once()->with(10)->andReturn('bar');
+		$redis->shouldReceive('fileRead')->once()->with(2);
+
+		$this->assertEquals('foobar', $redis->parseResponse("$1034\r\nfoo\r\n"));	
+	}
+
+
+	public function testMultiBulkResponse()
+	{
+		$redis = m::mock('Illuminate\Redis\Database[fileGet,fileRead]');
+		$redis->shouldReceive('fileGet')->twice()->with(512)->andReturn('$3');
+		$redis->shouldReceive('fileRead')->twice()->with(3)->andReturn('foo', 'bar');
+		$redis->shouldReceive('fileRead')->twice()->with(2);
+
+		$this->assertEquals(array('foo', 'bar'), $redis->parseResponse("*2\r\n$3\r\nfoo\r\n$3\r\nbar\r\n"));	
 	}
 
 
