@@ -93,7 +93,7 @@ class Database {
 	 */
 	protected function buildCommand($method, array $parameters)
 	{
-		$commnad = '*'.(count($parameters) + 1)."\r\n";
+		$command = '*'.(count($parameters) + 1)."\r\n";
 
 		// Before each parameter, we must send the number of bytes in the upcoming
 		// value that we are sending. So, we'll just take the sting length of a
@@ -215,7 +215,7 @@ class Database {
 	 */
 	protected function parseMultiResponse($response)
 	{
-		if (($total = substr($head, 1)) == '-1') return;
+		if (($total = substr($response, 1)) == '-1') return;
 
 		$data = array();
 
