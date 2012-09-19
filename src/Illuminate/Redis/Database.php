@@ -294,4 +294,16 @@ class Database {
 		return $this->connection;
 	}
 
+	/**
+	 * Dynamically make a Redis command.
+	 *
+	 * @param  string  $method
+	 * @param  array   $parameters
+	 * @return mixed
+	 */
+	public function __call($method, $parameters)
+	{
+		return $this->command($method, $parameters);
+	}
+
 }
