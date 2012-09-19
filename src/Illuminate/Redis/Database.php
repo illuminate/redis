@@ -91,7 +91,7 @@ class Database {
 	 * @param  array   $parameters
 	 * @return string
 	 */
-	protected function buildCommand($method, array $parameters)
+	public function buildCommand($method, array $parameters)
 	{
 		$command = '*'.(count($parameters) + 1)."\r\n";
 

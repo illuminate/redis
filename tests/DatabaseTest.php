@@ -25,4 +25,13 @@ class DatabaseTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals('parsed', $redis->command('foo', array('bar')));
 	}
 
+
+	public function testCommandsAreBuiltProperly()
+	{
+		$redis = new Database('127.0.0.1', 100);
+		$command = $redis->buildCommand('lpush', array('list', 'taylor'));
+
+		$this->assertEquals("*3\r\n$5\r\nLPUSH\r\n$4\r\nlist\r\n$6\r\ntaylor\r\n", $command);
+	}
+
 }
