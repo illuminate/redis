@@ -116,7 +116,7 @@ class Database {
 	 * @param  string  $response
 	 * @return mixed
 	 */
-	protected function parseResponse($response)
+	public function parseResponse($response)
 	{
 		switch (substr($response, 0, 1))
 		{
@@ -124,8 +124,10 @@ class Database {
 			// are dealing with. So we will process the response according to the
 			// the type of response we've received back from the Redis command.
 			case '+':
-			case ':':
 				return $this->parseInlineResponse($response);
+
+			case ':':
+				return (int) $this->parseInlineResponse($response);
 
 			case '$':
 				return $this->parseBulkResponse($response);

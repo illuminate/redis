@@ -1,5 +1,6 @@
 <?php
 
+use Mockery as m;
 use Illuminate\Redis\Database;
 
 class DatabaseTest extends PHPUnit_Framework_TestCase {
@@ -23,6 +24,37 @@ class DatabaseTest extends PHPUnit_Framework_TestCase {
 		$redis->expects($this->once())->method('parseResponse')->with($this->equalTo('results'))->will($this->returnValue('parsed'));
 
 		$this->assertEquals('parsed', $redis->command('foo', array('bar')));
+	}
+
+
+	public function testInlineParsing()
+	{
+		$redis = new Database('127.0.0.1', 100);
+		$response = $redis->parseResponse('+OK');
+
+		$this->assertEquals('OK', $response);
+	}
+
+
+	public function testIntegerInlineResponse()
+	{
+		$redis = new Database('127.0.0.1', 100);
+		$response = $redis->parseResponse(":1\r\n");
+
+		$this->assertEquals(1, $response);
+	}
+
+
+	public function testBulkResponse()
+	{
+		/*
+		$redis = $this->getMock('Illuminate\Redis\Database', array('fileRead'), array('127.0.0.1', 100));
+		$redis->expects($this->once())->method('fileRead')->with($this->equalTo(3))->will($this->returnValue('foo'));
+		$redis->expects($this->once())->method('fileRead')->with($this->equalTo(2));
+		$response = $redis->parseResponse("$3\r\nfoo\r\n");
+
+		$this->assertEquals('foo', $response);
+		*/
 	}
 
 
