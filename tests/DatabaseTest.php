@@ -13,4 +13,16 @@ class DatabaseTest extends PHPUnit_Framework_TestCase {
 		$redis->connect();
 	}
 
+
+	public function testCommandMethodIssuesCommand()
+	{
+		$redis = $this->getMock('Illuminate\Redis\Database', array('fileWrite', 'fileGet', 'buildCommand', 'parseResponse'), array('127.0.0.1', 100));
+		$redis->expects($this->once())->method('fileWrite')->with($this->equalTo('built'));
+		$redis->expects($this->once())->method('buildCommand')->with($this->equalTo('foo'), $this->equalTo(array('bar')))->will($this->returnValue('built'));
+		$redis->expects($this->once())->method('fileGet')->with($this->equalTo(512))->will($this->returnValue('results'));
+		$redis->expects($this->once())->method('parseResponse')->with($this->equalTo('results'))->will($this->returnValue('parsed'));
+
+		$this->assertEquals('parsed', $redis->command('foo', array('bar')));
+	}
+
 }
