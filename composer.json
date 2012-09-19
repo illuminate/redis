@@ -1,0 +1,16 @@
+{
+    "name": "illuminate/redis",
+    "keywords": ["laravel"],
+    "authors": [
+        {
+            "name": "Taylor Otwell",
+            "email": "taylorotwell@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "Illuminate\\Redis": "src/"
+        }
+    },
+    "minimum-stability": "dev"
+}
