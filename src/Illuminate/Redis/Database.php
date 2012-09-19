@@ -24,6 +24,13 @@ class Database {
 	protected $database;
 
 	/**
+	 * The Redis connection handler.
+	 *
+	 * @var resource
+	 */
+	protected $connection;
+
+	/**
 	 * Create a new Redis connection instance.
 	 *
 	 * @param  string  $host
