@@ -1,7 +1,6 @@
 <?php namespace Illuminate\Redis;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Foundation\Managers\RedisManager;
 
 class RedisServiceProvider extends ServiceProvider {
 
