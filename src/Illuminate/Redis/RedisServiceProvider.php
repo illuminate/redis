@@ -7,12 +7,11 @@ class RedisServiceProvider extends ServiceProvider {
 	/**
 	 * Register the service provider.
 	 *
-	 * @param  Illuminate\Foundation\Application  $app
 	 * @return void
 	 */
-	public function register($app)
+	public function register()
 	{
-		$app['redis'] = $app->share(function($app)
+		$this->app['redis'] = $this->app->share(function($app)
 		{
 			return new RedisManager($app);
 		});
